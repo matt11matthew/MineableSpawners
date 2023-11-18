@@ -45,7 +45,7 @@ give:
     player-does-not-exist: '&cThat player does not exist.'
     invalid-type: '&cThat type does not exist. Use &7/mineablespawners types &cto list all available types.'
     invalid-amount: '&cThe amount you entered is invalid. Please try again.'
-    inventory-full: '&cThe targets inventory is full. No spawner has been given.'
+    inventory-full: '&cYour inventory did not have enough room for all the spawners so some dropped on the ground'
     # Here you can use the placeholders: %amount% => amount given, %mob% => mob name, %target% => player receiving spawners
     success: '&aYou have successfully given %amount%x %mob% Spawners to %target%!'
     received: '&aYou have received %amount%x %mob% Spawners!'

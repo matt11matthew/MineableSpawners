@@ -3,6 +3,7 @@ package com.dnyferguson.mineablespawners.commands;
 import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
 import com.dnyferguson.mineablespawners.utils.Chat;
+import com.dnyferguson.mineablespawners.utils.Utils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
@@ -61,21 +62,25 @@ public class GiveSubCommand {
         nbti.setString("ms_mob", entityType.name());
 
         item = nbti.getItem();
+        Utils.addItemToInventory(targetPlayer, item, mobFormatted);
 
-        if (targetPlayer.getInventory().firstEmpty() == -1) {
+        sender.sendMessage(plugin.getConfigurationHandler().getMessage("give", "success").replace("%mob%", mobFormatted).replace("%target%", targetPlayer.getName()).replace("%amount%", amount + ""));
+        targetPlayer.sendMessage(plugin.getConfigurationHandler().getMessage("give", "received").replace("%mob%", mobFormatted).replace("%amount%", amount + ""));
+
+        /*if (targetPlayer.getInventory().firstEmpty() == -1) {
             if (!plugin.getConfigurationHandler().getBooleanOrDefault("give", "drop-if-full", true)) {
                 plugin.getConfigurationHandler().sendMessage("give", "inventory-full", sender);
                 return;
             }
 
             plugin.getLogger().log(Level.INFO, "Dropped " + amount + "x " + mobFormatted + " Spawners at " + targetPlayer.getName() + "'s feet since their inventory was full!");
-            targetPlayer.getWorld().dropItemNaturally(targetPlayer.getLocation(), item);
+            targetPlayer.getWorld().dropItem(targetPlayer.getLocation(), item);
 
             return;
         }
 
         targetPlayer.getInventory().addItem(item);
         plugin.getConfigurationHandler().getMessage("give", "success").replace("%mob%", mobFormatted).replace("%target%", targetPlayer.getName()).replace("%amount%", amount + "");
-        targetPlayer.sendMessage(plugin.getConfigurationHandler().getMessage("give", "received").replace("%mob%", mobFormatted).replace("%target%", targetPlayer.getName()).replace("%amount%", amount + ""));
+        targetPlayer.sendMessage(plugin.getConfigurationHandler().getMessage("give", "received").replace("%mob%", mobFormatted).replace("%target%", targetPlayer.getName()).replace("%amount%", amount + ""));*/
     }
 }

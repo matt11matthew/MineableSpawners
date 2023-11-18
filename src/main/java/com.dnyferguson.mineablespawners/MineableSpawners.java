@@ -12,12 +12,16 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class MineableSpawners extends JavaPlugin {
+    private static MineableSpawners plugin;
+
     private ConfigurationHandler configurationHandler;
     private Economy econ;
     private static API api;
 
     @Override
     public void onEnable() {
+        plugin = this;
+
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();
 
@@ -74,5 +78,9 @@ public final class MineableSpawners extends JavaPlugin {
 
     public static API getApi() {
         return api;
+    }
+
+    public static MineableSpawners getPlugin() {
+        return plugin;
     }
 }
