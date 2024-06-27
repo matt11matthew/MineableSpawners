@@ -2,21 +2,39 @@ package com.dnyferguson.mineablespawners;
 
 import com.dnyferguson.mineablespawners.api.API;
 import com.dnyferguson.mineablespawners.commands.MineableSpawnersCommand;
-import com.dnyferguson.mineablespawners.listeners.*;
-import com.dnyferguson.mineablespawners.metrics.Metrics;
+
+import com.dnyferguson.mineablespawners.listeners.AnvilRenameListener;
+import com.dnyferguson.mineablespawners.listeners.SpawnerExplodeListener;
+import com.dnyferguson.mineablespawners.listeners.WitherBreakSpawnerListener;
+import com.dnyferguson.mineablespawners.listeners.EggChangeListener;
+import com.dnyferguson.mineablespawners.listeners.SpawnerMineListener;
+import com.dnyferguson.mineablespawners.listeners.SpawnerPlaceListener;
 import com.dnyferguson.mineablespawners.utils.ConfigurationHandler;
+import me.matthewe.atheriallibplugin.AtherialAddon;
+import me.matthewe.atheriallibplugin.AtherialLibPlugin;
+import me.matthewedevelopment.atheriallib.dependency.vault.VaultDependency;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public final class MineableSpawners extends JavaPlugin {
+public final class MineableSpawners extends AtherialAddon {
     private static MineableSpawners plugin;
 
     private ConfigurationHandler configurationHandler;
-    private Economy econ;
+//    private Economy econ;
     private static API api;
+
+    @Override
+    public void onStart() {
+
+    }
+
+    @Override
+    public void onStop() {
+
+    }
 
     @Override
     public void onEnable() {
@@ -27,9 +45,6 @@ public final class MineableSpawners extends JavaPlugin {
 
         configurationHandler = new ConfigurationHandler(this);
 
-        if (!setupEconomy()) {
-            getLogger().info("vault not found, economy features disabled.");
-        }
 
         getCommand("mineablespawners").setExecutor(new MineableSpawnersCommand(this));
 
@@ -52,20 +67,6 @@ public final class MineableSpawners extends JavaPlugin {
         }
 
         api = new API(this);
-        int pluginId = 7354;
-        Metrics metrics = new Metrics(this, pluginId);
-    }
-
-    private boolean setupEconomy() {
-        if (getServer().getPluginManager().getPlugin("Vault") == null) {
-            return false;
-        }
-        RegisteredServiceProvider<Economy> rsp = getServer().getServicesManager().getRegistration(Economy.class);
-        if (rsp == null) {
-            return false;
-        }
-        econ = rsp.getProvider();
-        return econ != null;
     }
 
     public ConfigurationHandler getConfigurationHandler() {
@@ -73,7 +74,7 @@ public final class MineableSpawners extends JavaPlugin {
     }
 
     public Economy getEcon() {
-        return econ;
+        return AtherialLibPlugin.getInstance().getDependencyManager().getDependency(VaultDependency.class).getEconomy();
     }
 
     public static API getApi() {
