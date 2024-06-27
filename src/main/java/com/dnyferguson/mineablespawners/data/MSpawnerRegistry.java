@@ -13,7 +13,7 @@ import java.util.UUID;
  */
 public class MSpawnerRegistry  extends DataObjectRegistry<MSpawner> {
     private Map<AtherialLocation, UUID> spawnerLocationMap;
-    
+
     public MSpawnerRegistry() {
         super(MSpawner.class);
         this. spawnerLocationMap=new HashMap<>();
