@@ -26,6 +26,11 @@ public final class MineableSpawners extends AtherialAddon {
 //    private Economy econ;
     private static API api;
 
+    public MineableSpawners() {
+        
+        AtherialLibPlugin.registerAddon(this);
+    }
+
     @Override
     public void onStart() {
 
