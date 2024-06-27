@@ -10,7 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
- 
+
 public final class MineableSpawners extends JavaPlugin {
     private static MineableSpawners plugin;
 
