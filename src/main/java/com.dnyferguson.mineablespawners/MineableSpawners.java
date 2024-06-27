@@ -3,6 +3,7 @@ package com.dnyferguson.mineablespawners;
 import com.dnyferguson.mineablespawners.api.API;
 import com.dnyferguson.mineablespawners.commands.MineableSpawnersCommand;
 
+import com.dnyferguson.mineablespawners.data.MSpawnerRegistry;
 import com.dnyferguson.mineablespawners.listeners.AnvilRenameListener;
 import com.dnyferguson.mineablespawners.listeners.SpawnerExplodeListener;
 import com.dnyferguson.mineablespawners.listeners.WitherBreakSpawnerListener;
@@ -22,12 +23,13 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class MineableSpawners extends AtherialAddon {
     private static MineableSpawners plugin;
 
+    private MSpawnerRegistry spawnerRegistry;
     private ConfigurationHandler configurationHandler;
 //    private Economy econ;
     private static API api;
 
     public MineableSpawners() {
-        
+
         AtherialLibPlugin.registerAddon(this);
     }
 
@@ -72,6 +74,13 @@ public final class MineableSpawners extends AtherialAddon {
         }
 
         api = new API(this);
+
+        spawnerRegistry = new MSpawnerRegistry();
+        spawnerRegistry.register();
+    }
+
+    public MSpawnerRegistry getSpawnerRegistry() {
+        return spawnerRegistry;
     }
 
     public ConfigurationHandler getConfigurationHandler() {
