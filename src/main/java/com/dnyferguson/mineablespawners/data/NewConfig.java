@@ -14,6 +14,7 @@ import java.util.List;
 public class NewConfig  extends YamlConfig<MineableSpawners> {
 
     public ChatMessage NOT_OWNER_PLACE_ITEM = new ChatMessage("&cYou cannot place another players spawners!");
+   @SerializedName("spawnDistance") public Integer SPAWN_DISTANCE = 32;
     public ChatMessage NOT_OWNER_CANT_BREAK = new ChatMessage("&cYou cannot break another players spawner!");
     @SerializedName("notSoulBound")
     public  List<String> EXCLUDED = Arrays.asList("ZOMBIE");

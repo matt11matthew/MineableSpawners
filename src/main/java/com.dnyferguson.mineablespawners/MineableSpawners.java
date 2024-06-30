@@ -5,6 +5,7 @@ import com.dnyferguson.mineablespawners.commands.MineableSpawnersCommand;
 
 import com.dnyferguson.mineablespawners.data.MSpawnerRegistry;
 import com.dnyferguson.mineablespawners.data.NewConfig;
+import com.dnyferguson.mineablespawners.data.SpawnerOwnerListener;
 import com.dnyferguson.mineablespawners.listeners.AnvilRenameListener;
 import com.dnyferguson.mineablespawners.listeners.SpawnerExplodeListener;
 import com.dnyferguson.mineablespawners.listeners.WitherBreakSpawnerListener;
@@ -74,6 +75,7 @@ AtherialLibPlugin.getInstance().setDebug(true);
         pm.registerEvents(new AnvilRenameListener(this), this);
         pm.registerEvents(new SpawnerExplodeListener(this), this);
         pm.registerEvents(new WitherBreakSpawnerListener(this), this);
+        pm.registerEvents(new SpawnerOwnerListener(this), this);
 
         if (getConfigurationHandler().getBoolean("global", "show-available")) {
             StringBuilder str = new StringBuilder("Available mob types: \n");

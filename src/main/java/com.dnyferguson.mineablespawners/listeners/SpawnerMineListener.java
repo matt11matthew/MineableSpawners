@@ -108,7 +108,10 @@ public class SpawnerMineListener implements Listener {
 
         if (bypassing) {
             onBreak(loc);
-            player.sendMessage(colorize("&c&lBYPASSED"));
+            if (AtherialLibPlugin.getInstance().isDebug()){
+
+                player.sendMessage(colorize("&c&lBYPASSED"));
+            }
             giveSpawner(e, entityType, loc, player, block, 0, owner);
             return;
         }
@@ -212,7 +215,7 @@ public class SpawnerMineListener implements Listener {
             boolean b = mSpawnerRegistry.deleteSpawner(loc);
             if (b) {
                 if (AtherialLibPlugin.getInstance().isDebug()){
-                    Bukkit.getServer().broadcastMessage("BREAK " + spawner);
+//                    Bukkit.getServer().broadcastMessage("BREAK " + spawner);
                 }
             }
         }

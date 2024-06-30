@@ -34,13 +34,19 @@ public class WitherBreakSpawnerListener implements Listener {
             return;
         }
 
-        if (!plugin.getConfigurationHandler().getBooleanOrDefault("wither", "drop", false)) {
-            return;
-        }
 
         Block block = event.getBlock();
 
         if (!block.getType().equals(XMaterial.SPAWNER.parseMaterial())) {
+            return;
+        }
+        boolean disabled = true;
+        if (disabled) {
+            event.setCancelled(true);
+            return;
+        }
+
+        if (!plugin.getConfigurationHandler().getBooleanOrDefault("wither", "drop", false)) {
             return;
         }
 

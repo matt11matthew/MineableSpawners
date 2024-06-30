@@ -38,6 +38,11 @@ public class EggChangeListener implements Listener {
             return;
         }
 
+        boolean disabled = true;
+        if (disabled) {
+            e.setCancelled(true);
+            return;
+        }
         if (plugin.getConfigurationHandler().getList("eggs", "blacklisted-worlds").contains(player.getWorld().getName())) {
             e.setCancelled(true);
             player.sendMessage(plugin.getConfigurationHandler().getMessage("eggs", "blacklisted"));

@@ -33,8 +33,16 @@ public class SpawnerExplodeListener implements Listener {
             return;
         }
 
+        List<Block> removeList = new ArrayList<>();
+
+        boolean disabled =true;
         for (Block block : e.blockList()) {
             if (!block.getType().equals(XMaterial.SPAWNER.parseMaterial())) {
+                continue;
+            }
+            if (disabled) {
+                removeList.add(block);
+
                 continue;
             }
 
@@ -73,6 +81,9 @@ public class SpawnerExplodeListener implements Listener {
             if (block.getLocation().getWorld() != null) {
                 block.getLocation().getWorld().dropItemNaturally(block.getLocation(), item);
             }
+        }
+        for (Block block : removeList) {
+            e.blockList().remove(block);
         }
     }
 }
