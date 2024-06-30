@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.UUID;
 
 public class API {
     private final MineableSpawners plugin;
@@ -20,6 +21,10 @@ public class API {
         this.plugin = plugin;
     }
 
+    public UUID getOwnerFromItemStack(ItemStack item) {
+        NBTItem nbti = new NBTItem(item);
+        return nbti.hasKey("ms_owner") ? UUID.fromString(nbti.getString("ms_owner")) : null;
+    }
     public EntityType getEntityTypeFromItemStack(ItemStack item) {
         EntityType entityType = null;
 

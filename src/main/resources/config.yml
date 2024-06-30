@@ -5,7 +5,10 @@
 #
 # General
 #
+
 global:
+  notSoulBound:
+    - ZOMBIE
   # Enable/Disable backwards compatibility (Checks spawner item lore/name). Not recommended unless you have too many old
   # spawners in circulation that you don't want to manually trade for new ones. When this is disabled, you can safely let
   # people rename spawners.
@@ -16,8 +19,11 @@ global:
   display:
     name: '&e%mob% &fSpawner'
     lore:
-      - '&aPlace this down for'
-      - '&a %mob% Spawner.'
+      - '&e&lInformation'
+      - '&eType: &f%mob%'
+      - '&eOwner: &f%owner%'
+      - ' '
+      - '&7Place this spawner.'
     lore-enabled: true
 
 #

@@ -5,6 +5,7 @@ authors: [fergydanny]
 description: A simplistic silk spawner plugin
 website: https://dnyferguson.com
 softdepend: [Vault]
+depend: [AtherialLibPlugin]
 api-version: 1.13
 commands:
   mineablespawners:

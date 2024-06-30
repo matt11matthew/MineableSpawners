@@ -62,6 +62,7 @@
                             <shadedPattern>com.dnyferguson.mineablespawners.xseries</shadedPattern>
                         </relocation>
                     </relocations>
+                    <finalName>MineableSpawners</finalName>
                 </configuration>
             </plugin>
         </plugins>

@@ -2,6 +2,7 @@ package com.dnyferguson.mineablespawners.listeners;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
+import com.dnyferguson.mineablespawners.data.MSpawnerRegistry;
 import com.dnyferguson.mineablespawners.utils.Chat;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -19,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class SpawnerPlaceListener implements Listener {
     private final MineableSpawners plugin;
@@ -59,6 +61,7 @@ public class SpawnerPlaceListener implements Listener {
         // check if valid entity type
         ItemStack item = e.getItemInHand();
         EntityType entityType = MineableSpawners.getApi().getEntityTypeFromItemStack(item);
+        UUID owner = MineableSpawners.getApi().getOwnerFromItemStack(item);
         if (entityType == null) {
             return;
         }
@@ -67,7 +70,7 @@ public class SpawnerPlaceListener implements Listener {
         Player player = e.getPlayer();
         boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("mineablespawners.bypass");
         if (bypassing) {
-            handlePlacement(player, block, entityType, 0);
+            handlePlacement(player, block, entityType, 0, owner);
             return;
         }
 
@@ -96,14 +99,16 @@ public class SpawnerPlaceListener implements Listener {
         }
 
         // place
-        handlePlacement(player, block, entityType, cost);
+        handlePlacement(player, block, entityType, cost, owner);
     }
 
-    private void handlePlacement(Player player, Block block, EntityType type, double cost) {
+    private void handlePlacement(Player player, Block block, EntityType type, double cost, UUID owner) {
         CreatureSpawner spawner = (CreatureSpawner) block.getState();
         spawner.setSpawnedType(type);
         spawner.update();
 
+        MSpawnerRegistry spawnerRegistry = MineableSpawners.getPlugin().getSpawnerRegistry();
+        spawnerRegistry.get
         if (plugin.getConfigurationHandler().getBoolean("placing", "log")) {
             Location loc = block.getLocation();
             plugin.getLogger().info("Player " + player.getName() + " placed a " + type.name().toLowerCase() + " spawner at x:" + loc.getX() + ", y:" + loc.getY() + ", z:" + loc.getZ() + " (" + loc.getWorld().getName() + ")");

@@ -17,7 +17,13 @@ import java.util.UUID;
 public class MSpawner  extends DataObject<MSpawner> {
 
     private AtherialLocation location;
+    private String type="";
 
+    public MSpawner(UUID uuid, AtherialLocation location, String type) {
+        super(uuid);
+        this.location = location;
+        this.type = type;
+    }
 
     public MSpawner(UUID uuid) {
         super(uuid);
@@ -35,8 +41,13 @@ public class MSpawner  extends DataObject<MSpawner> {
     public List<DataColumn> getDefaultColumns() {
         List<DataColumn> columns = new ArrayList<>();
         columns.add(new DataColumn("location", DataColumnType.VARCHAR, location));
+        columns.add(new DataColumn("type", DataColumnType.VARCHAR, type));
 
         return columns;
+    }
+
+    public String getType() {
+        return type;
     }
 
     @Override
@@ -47,6 +58,7 @@ public class MSpawner  extends DataObject<MSpawner> {
                 location = AtherialLocation.fromString(locString);
             }
 
+            type=rs.getString("type");
         } catch (SQLException e) {
             e.printStackTrace();
         }

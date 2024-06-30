@@ -4,6 +4,7 @@ import com.dnyferguson.mineablespawners.api.API;
 import com.dnyferguson.mineablespawners.commands.MineableSpawnersCommand;
 
 import com.dnyferguson.mineablespawners.data.MSpawnerRegistry;
+import com.dnyferguson.mineablespawners.data.NewConfig;
 import com.dnyferguson.mineablespawners.listeners.AnvilRenameListener;
 import com.dnyferguson.mineablespawners.listeners.SpawnerExplodeListener;
 import com.dnyferguson.mineablespawners.listeners.WitherBreakSpawnerListener;
@@ -28,7 +29,14 @@ public final class MineableSpawners extends AtherialAddon {
 //    private Economy econ;
     private static API api;
 
+    private static NewConfig newC;
+
+    public static NewConfig getNewC() {
+        return newC;
+    }
+
     public MineableSpawners() {
+
 
         AtherialLibPlugin.registerAddon(this);
     }
@@ -46,6 +54,9 @@ public final class MineableSpawners extends AtherialAddon {
     @Override
     public void onEnable() {
         plugin = this;
+
+        newC=new NewConfig(this);
+        newC.loadConfig();
 
         getConfig().options().copyDefaults(true);
         saveDefaultConfig();

@@ -2,6 +2,7 @@ package com.dnyferguson.mineablespawners.commands;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
+import com.dnyferguson.mineablespawners.data.NewConfig;
 import com.dnyferguson.mineablespawners.utils.Chat;
 import com.dnyferguson.mineablespawners.utils.Utils;
 import de.tr7zw.changeme.nbtapi.NBTItem;
@@ -48,11 +49,19 @@ public class GiveSubCommand {
         item.setAmount(amount);
 
         String mobFormatted = Chat.uppercaseStartingLetters(entityType.name());
+        boolean excluded = false;
+        for (String s : MineableSpawners.getNewC().EXCLUDED) {
+            if (s.equalsIgnoreCase(entityType.toString())) {
+                excluded=true;
+                break;
+            }
+        }
         meta.setDisplayName(Chat.format(plugin.getConfigurationHandler().getMessage("global", "name").replace("%mob%", mobFormatted)));
         List<String> newLore = new ArrayList<>();
         if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
             for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
-                newLore.add(Chat.format(line).replace("%mob%", mobFormatted));
+                if (line.toLowerCase().contains("%owner%") && excluded)continue;
+                newLore.add(Chat.format(line.replace("%owner%", targetPlayer.getName())).replace("%mob%", mobFormatted));
             }
             meta.setLore(newLore);
         }
@@ -60,6 +69,10 @@ public class GiveSubCommand {
 
         NBTItem nbti = new NBTItem(item);
         nbti.setString("ms_mob", entityType.name());
+        if (!excluded) {
+            nbti.setString("ms_owner", targetPlayer.getUniqueId().toString());
+
+        }
 
         item = nbti.getItem();
         Utils.addItemToInventory(targetPlayer, item, mobFormatted);
