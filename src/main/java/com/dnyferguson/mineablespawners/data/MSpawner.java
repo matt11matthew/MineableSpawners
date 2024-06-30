@@ -4,6 +4,7 @@ import me.matthewedevelopment.atheriallib.database.registry.DataColumn;
 import me.matthewedevelopment.atheriallib.database.registry.DataColumnType;
 import me.matthewedevelopment.atheriallib.database.registry.DataObject;
 import me.matthewedevelopment.atheriallib.utilities.location.AtherialLocation;
+import me.matthewedevelopment.atheriallib.utilities.location.AtherialXYZLocation;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,13 +17,20 @@ import java.util.UUID;
  */
 public class MSpawner  extends DataObject<MSpawner> {
 
-    private AtherialLocation location;
-    private String type="";
+    private AtherialXYZLocation location;
+    private String type;
+    private UUID owner;
 
-    public MSpawner(UUID uuid, AtherialLocation location, String type) {
+    public MSpawner(UUID uuid, AtherialXYZLocation location, String type, UUID owner) {
         super(uuid);
         this.location = location;
         this.type = type;
+        this.owner = owner;
+
+    }
+
+    public UUID getOwner() {
+        return owner;
     }
 
     public MSpawner(UUID uuid) {
@@ -42,6 +50,7 @@ public class MSpawner  extends DataObject<MSpawner> {
         List<DataColumn> columns = new ArrayList<>();
         columns.add(new DataColumn("location", DataColumnType.VARCHAR, location));
         columns.add(new DataColumn("type", DataColumnType.VARCHAR, type));
+        columns.add(new DataColumn("owner", DataColumnType.VARCHAR, owner));
 
         return columns;
     }
@@ -55,10 +64,13 @@ public class MSpawner  extends DataObject<MSpawner> {
         try {
             String locString = rs.getString("location");
             if (isTextClear(locString)) {
-                location = AtherialLocation.fromString(locString);
+                location = AtherialXYZLocation.fromString(locString);
             }
 
             type=rs.getString("type");
+
+            String ownerString = rs.getString("owner");
+            owner=isTextClear(ownerString)?UUID.fromString(ownerString) : null;
         } catch (SQLException e) {
             e.printStackTrace();
         }

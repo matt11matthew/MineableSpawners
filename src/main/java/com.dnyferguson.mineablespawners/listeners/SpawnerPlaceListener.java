@@ -3,6 +3,7 @@ package com.dnyferguson.mineablespawners.listeners;
 import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
 import com.dnyferguson.mineablespawners.data.MSpawnerRegistry;
+import com.dnyferguson.mineablespawners.data.NewConfig;
 import com.dnyferguson.mineablespawners.utils.Chat;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -68,6 +69,11 @@ public class SpawnerPlaceListener implements Listener {
 
         // check if user is bypassing
         Player player = e.getPlayer();
+        if (owner!=null&&!player.getUniqueId().equals(owner)){
+            e.setCancelled(true);
+            NewConfig.get().NOT_OWNER_PLACE_ITEM.send(player);
+            return;
+        }
         boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("mineablespawners.bypass");
         if (bypassing) {
             handlePlacement(player, block, entityType, 0, owner);
@@ -103,12 +109,16 @@ public class SpawnerPlaceListener implements Listener {
     }
 
     private void handlePlacement(Player player, Block block, EntityType type, double cost, UUID owner) {
+
         CreatureSpawner spawner = (CreatureSpawner) block.getState();
         spawner.setSpawnedType(type);
         spawner.update();
 
-        MSpawnerRegistry spawnerRegistry = MineableSpawners.getPlugin().getSpawnerRegistry();
-        spawnerRegistry.get
+        if (owner!=null){
+
+            MSpawnerRegistry spawnerRegistry = MineableSpawners.getPlugin().getSpawnerRegistry();
+            spawnerRegistry.insertNewSpawner(block.getLocation(),player, type);
+        }
         if (plugin.getConfigurationHandler().getBoolean("placing", "log")) {
             Location loc = block.getLocation();
             plugin.getLogger().info("Player " + player.getName() + " placed a " + type.name().toLowerCase() + " spawner at x:" + loc.getX() + ", y:" + loc.getY() + ", z:" + loc.getZ() + " (" + loc.getWorld().getName() + ")");

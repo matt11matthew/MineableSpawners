@@ -2,9 +2,11 @@ package com.dnyferguson.mineablespawners.utils;
 
 import org.bukkit.ChatColor;
 
+import static me.matthewedevelopment.atheriallib.utilities.ChatUtils.colorize;
+
 public class Chat {
   public static String format(String msg) {
-    return ChatColor.translateAlternateColorCodes('&', msg);
+    return colorize(msg);
   }
 
   public static String uppercaseStartingLetters(String msg) {

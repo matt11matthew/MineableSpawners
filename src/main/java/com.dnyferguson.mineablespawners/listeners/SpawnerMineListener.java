@@ -2,10 +2,13 @@ package com.dnyferguson.mineablespawners.listeners;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
+import com.dnyferguson.mineablespawners.data.MSpawner;
+import com.dnyferguson.mineablespawners.data.MSpawnerRegistry;
+import com.dnyferguson.mineablespawners.data.NewConfig;
 import com.dnyferguson.mineablespawners.utils.Chat;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import me.matthewe.atheriallibplugin.AtherialLibPlugin;
+import me.matthewedevelopment.atheriallib.AtherialLib;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.enchantments.Enchantment;
@@ -18,10 +21,9 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.text.DecimalFormat;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
+
+import static me.matthewedevelopment.atheriallib.utilities.ChatUtils.colorize;
 
 public class SpawnerMineListener implements Listener {
     private final MineableSpawners plugin;
@@ -77,6 +79,24 @@ public class SpawnerMineListener implements Listener {
         CreatureSpawner spawner = (CreatureSpawner) block.getState();
         EntityType entityType = spawner.getSpawnedType();
 
+        MSpawnerRegistry mSpawnerRegistry = MSpawnerRegistry.get();
+
+        UUID owner = null;
+        if (mSpawnerRegistry.isSpawner(block.getLocation())){
+            MSpawner spawner1 = mSpawnerRegistry.getSpawner(loc);
+            if (spawner1==null){
+                e.setCancelled(true);
+                Bukkit.getServer().broadcastMessage(ChatColor.RED+"Major error with MineableSpawners please report ASAP!");
+                return;
+            }
+            owner=spawner1.getOwner();
+            if (!spawner1.getOwner().equals(e.getPlayer().getUniqueId())){
+                NewConfig.get().NOT_OWNER_CANT_BREAK.send(e.getPlayer());
+                e.setCancelled(true);
+
+                return;
+            }
+        }
         // check if should give exp
         if (!plugin.getConfigurationHandler().getBoolean("mining", "drop-exp") || minedSpawners.contains(loc)) {
             e.setExpToDrop(0);
@@ -85,8 +105,11 @@ public class SpawnerMineListener implements Listener {
         // check if bypassing
         Player player = e.getPlayer();
         boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("mineablespawners.bypass");
+
         if (bypassing) {
-            giveSpawner(e, entityType, loc, player, block, 0);
+            onBreak(loc);
+            player.sendMessage(colorize("&c&lBYPASSED"));
+            giveSpawner(e, entityType, loc, player, block, 0, owner);
             return;
         }
 
@@ -157,6 +180,7 @@ public class SpawnerMineListener implements Listener {
             }
         }
 
+        onBreak(loc);
         // check chances
         double dropChance = 1;
         if (plugin.getConfigurationHandler().getBoolean("mining", "use-perm-based-chances") && permissionChances.size() > 0) {
@@ -178,11 +202,24 @@ public class SpawnerMineListener implements Listener {
         }
 
         // handle giving spawner
-        giveSpawner(e, entityType, loc, player, block, cost);
+        giveSpawner(e, entityType, loc, player, block, cost, owner);
     }
 
-    private void giveSpawner(BlockBreakEvent e, EntityType entityType, Location loc, Player player, Block block, double cost) {
-        ItemStack item = MineableSpawners.getApi().getSpawnerFromEntityType(entityType);
+    private void onBreak(Location loc) {
+        MSpawnerRegistry mSpawnerRegistry = MSpawnerRegistry.get();
+        if (mSpawnerRegistry.isSpawner(loc)) {
+            MSpawner spawner = mSpawnerRegistry.getSpawner(loc);
+            boolean b = mSpawnerRegistry.deleteSpawner(loc);
+            if (b) {
+                if (AtherialLibPlugin.getInstance().isDebug()){
+                    Bukkit.getServer().broadcastMessage("BREAK " + spawner);
+                }
+            }
+        }
+    }
+
+    private void giveSpawner(BlockBreakEvent e, EntityType entityType, Location loc, Player player, Block block, double cost, UUID owner) {
+        ItemStack item = MineableSpawners.getApi().getSpawnerFromEntityType(entityType, owner);
 
         if (cost > 0) {
             player.sendMessage(plugin.getConfigurationHandler().getMessage("mining", "transaction-success").replace("%type%", Chat.uppercaseStartingLetters(entityType.name())).replace("%cost%", df.format(cost)).replace("%balance%", df.format(plugin.getEcon().getBalance(player))));
@@ -210,6 +247,7 @@ public class SpawnerMineListener implements Listener {
             player.sendMessage(Chat.format(msg));
             return;
         }
+        onBreak(e.getBlock().getLocation());
 
         if (msg.length() > 0) {
             player.sendMessage(plugin.getConfigurationHandler().getMessage("mining", "still-break").replace("%requirement%", reason));

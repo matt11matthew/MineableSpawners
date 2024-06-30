@@ -38,12 +38,13 @@ public final class MineableSpawners extends AtherialAddon {
     public MineableSpawners() {
 
 
+
         AtherialLibPlugin.registerAddon(this);
     }
 
     @Override
     public void onStart() {
-
+AtherialLibPlugin.getInstance().setDebug(true);
     }
 
     @Override

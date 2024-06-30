@@ -4,7 +4,9 @@ import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
 import com.dnyferguson.mineablespawners.utils.Chat;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -53,12 +55,12 @@ public class API {
         return entityType;
     }
 
-    public ItemStack getSpawnerFromEntityName(String entityName) {
-        EntityType entityType = EntityType.valueOf(entityName.toUpperCase().replace(" ","_"));
-        return getSpawnerFromEntityType(entityType);
-    }
+//    public ItemStack getSpawnerFromEntityName(String entityName) {
+//        EntityType entityType = EntityType.valueOf(entityName.toUpperCase().replace(" ","_"));
+//        return getSpawnerFromEntityType(entityType);
+//    }
 
-    public ItemStack getSpawnerFromEntityType(EntityType entityType) {
+    public ItemStack getSpawnerFromEntityType(EntityType entityType, UUID owner) {
         ItemStack item = new ItemStack(Objects.requireNonNull(XMaterial.SPAWNER.parseMaterial()));
         ItemMeta meta = item.getItemMeta();
 
@@ -67,15 +69,40 @@ public class API {
         List<String> newLore = new ArrayList<>();
         if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
             for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
-                newLore.add(Chat.format(line).replace("%mob%", mobFormatted));
+                if (line.toLowerCase().contains("%owner%")){
+                    if (owner==null)continue;
+                    newLore.add(Chat.format(line).replace("%owner%",getUsername(owner)).replace("%mob%", mobFormatted));
+                } else {
+
+                    newLore.add(Chat.format(line).replace("%mob%", mobFormatted));
+                }
             }
             meta.setLore(newLore);
         }
         item.setItemMeta(meta);
 
+
+        boolean excluded = false;
+        for (String s : MineableSpawners.getNewC().EXCLUDED) {
+            if (s.equalsIgnoreCase(entityType.toString())) {
+                excluded=true;
+                break;
+            }
+        }
+
         NBTItem nbti = new NBTItem(item);
         nbti.setString("ms_mob", entityType.name());
+        if (!excluded && owner!=null) {
+            nbti.setString("ms_owner", owner.toString());
 
+        }
         return nbti.getItem();
+    }
+
+    private String getUsername(UUID owner) {
+        OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(owner);
+        if (offlinePlayer==null)return "ERROR";
+        if (!offlinePlayer.hasPlayedBefore())return "ERROR";
+        return offlinePlayer.getName();
     }
 }
