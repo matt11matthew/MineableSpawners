@@ -45,7 +45,7 @@ public final class MineableSpawners extends AtherialAddon {
 
     @Override
     public void onStart() {
-AtherialLibPlugin.getInstance().setDebug(true);
+//AtherialLibPlugin.getInstance().setDebug(true);
     }
 
     @Override

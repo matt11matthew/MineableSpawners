@@ -38,6 +38,7 @@ public class SpawnerOwnerListener implements Listener {
         }
         UUID uuid = UUID.fromString(nbtItem.getString("ms_owner"));
         if (event.getPlayer().getUniqueId().equals(uuid)){
+
             return;
         }
 
@@ -64,13 +65,14 @@ public class SpawnerOwnerListener implements Listener {
         }
         if (ownerPlayer==null) {
             event.setCancelled(true);
-            Bukkit.getServer(). broadcastMessage("owner not found CANCEL");
+//            Bukkit.getServer(). broadcastMessage("owner not found CANCEL");
             return;
         }
 
         if (ownerPlayer.getLocation().distance(location) > NewConfig.get().SPAWN_DISTANCE) {
             event.setCancelled(true);
-            Bukkit.getServer(). broadcastMessage("CANCEL");
+//            Bukkit.getServer(). broadcastMessage("CANCEL");
         }
+//        Bukkit.getServer().broadcastMessage("ALLOW SPAWN");
     }
 }
