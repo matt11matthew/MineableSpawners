@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -65,6 +66,7 @@ public class GiveSubCommand {
             }
             meta.setLore(newLore);
         }
+        meta.addItemFlags(ItemFlag.values());
         item.setItemMeta(meta);
 
         NBTItem nbti = new NBTItem(item);

@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.EntityType;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -63,7 +64,7 @@ public class API {
     public ItemStack getSpawnerFromEntityType(EntityType entityType, UUID owner) {
         ItemStack item = new ItemStack(Objects.requireNonNull(XMaterial.SPAWNER.parseMaterial()));
         ItemMeta meta = item.getItemMeta();
-
+        meta.addItemFlags(ItemFlag.values());
         String mobFormatted = Chat.uppercaseStartingLetters(entityType.name().toString());
         meta.setDisplayName(plugin.getConfigurationHandler().getMessage("global", "name").replace("%mob%", mobFormatted));
         List<String> newLore = new ArrayList<>();
