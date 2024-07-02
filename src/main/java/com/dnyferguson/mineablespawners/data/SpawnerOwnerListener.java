@@ -2,10 +2,12 @@ package com.dnyferguson.mineablespawners.data;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
+import com.dnyferguson.mineablespawners.api.API;
 import com.google.gson.JsonParseException;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -27,15 +29,29 @@ public class SpawnerOwnerListener implements Listener {
         this.mineableSpawners = mineableSpawners;
     }
 
+
     @EventHandler
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         Item item = event.getItem();
         if (item.getItemStack().getType()!= XMaterial.SPAWNER.parseMaterial())return;
         ItemStack itemStack = item.getItemStack();
         NBTItem nbtItem = new NBTItem(itemStack);
+
         if (!nbtItem.hasTag("ms_owner")) {
+            if (!nbtItem.hasTag("ms_mob")){
+                return;
+            }
+            int amt = itemStack.getAmount();
+            boolean msMob = NewConfig.get().EXCLUDED.contains(nbtItem.getString("ms_mob"));
+            if (msMob)return;
+            ItemStack msMob1 = MineableSpawners.getApi().getSpawnerFromEntityType(EntityType.valueOf(nbtItem.getString("ms_mob")), event.getPlayer().getUniqueId());
+
+            msMob1.setAmount(amt);
+            event.getItem().setItemStack(msMob1);
             return;
         }
+        if (event.getPlayer().hasPermission("mineablespawners.bypass"))return;
+
         UUID uuid = UUID.fromString(nbtItem.getString("ms_owner"));
         if (event.getPlayer().getUniqueId().equals(uuid)){
 
