@@ -12,10 +12,14 @@ import com.dnyferguson.mineablespawners.listeners.WitherBreakSpawnerListener;
 import com.dnyferguson.mineablespawners.listeners.EggChangeListener;
 import com.dnyferguson.mineablespawners.listeners.SpawnerMineListener;
 import com.dnyferguson.mineablespawners.listeners.SpawnerPlaceListener;
+import com.dnyferguson.mineablespawners.shopguiplus.MineableSpawnersProvider;
 import com.dnyferguson.mineablespawners.utils.ConfigurationHandler;
 import me.matthewe.atheriallibplugin.AtherialAddon;
 import me.matthewe.atheriallibplugin.AtherialLibPlugin;
 import me.matthewedevelopment.atheriallib.dependency.vault.VaultDependency;
+import net.brcdev.shopgui.ShopGuiPlusApi;
+import net.brcdev.shopgui.exception.api.ExternalSpawnerProviderNameConflictException;
+import net.brcdev.shopgui.spawner.external.provider.ExternalSpawnerProvider;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.entity.EntityType;
 import org.bukkit.plugin.PluginManager;
@@ -34,6 +38,16 @@ public final class MineableSpawners extends AtherialAddon {
 
     public static NewConfig getNewC() {
         return newC;
+    }
+
+    private MineableSpawnersProvider spawnerProvider;
+
+    private void hookIntoShopGui() {
+        try {
+            ShopGuiPlusApi.registerSpawnerProvider((ExternalSpawnerProvider)this.spawnerProvider);
+        } catch (ExternalSpawnerProviderNameConflictException e) {
+            getLogger().warning("Failed to hook into ShopGUI+: " + e.getMessage());
+        }
     }
 
     public MineableSpawners() {
@@ -65,6 +79,8 @@ public final class MineableSpawners extends AtherialAddon {
 
         configurationHandler = new ConfigurationHandler(this);
 
+        this.spawnerProvider = new MineableSpawnersProvider();
+        hookIntoShopGui();
 
         getCommand("mineablespawners").setExecutor(new MineableSpawnersCommand(this));
 

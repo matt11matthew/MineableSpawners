@@ -104,14 +104,13 @@ public class SpawnerMineListener implements Listener {
 
         // check if bypassing
         Player player = e.getPlayer();
-        boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("mineablespawners.bypass");
+        boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE);
+//        || player.hasPermission("mineablespawners.bypass");
 
         if (bypassing) {
             onBreak(loc);
-            if (AtherialLibPlugin.getInstance().isDebug()){
 
-                player.sendMessage(colorize("&c&lBYPASSED"));
-            }
+            player.sendMessage(colorize("&c&lBYPASSED"));
             giveSpawner(e, entityType, loc, player, block, 0, owner);
             return;
         }
@@ -205,7 +204,7 @@ public class SpawnerMineListener implements Listener {
         }
 
         // handle giving spawner
-        giveSpawner(e, entityType, loc, player, block, cost, owner);
+        giveSpawner(e, entityType, loc, player, block, cost, player.getUniqueId());
     }
 
     private void onBreak(Location loc) {
@@ -223,6 +222,7 @@ public class SpawnerMineListener implements Listener {
 
     private void giveSpawner(BlockBreakEvent e, EntityType entityType, Location loc, Player player, Block block, double cost, UUID owner) {
         ItemStack item = MineableSpawners.getApi().getSpawnerFromEntityType(entityType, owner);
+
 
         if (cost > 0) {
             player.sendMessage(plugin.getConfigurationHandler().getMessage("mining", "transaction-success").replace("%type%", Chat.uppercaseStartingLetters(entityType.name())).replace("%cost%", df.format(cost)).replace("%balance%", df.format(plugin.getEcon().getBalance(player))));

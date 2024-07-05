@@ -37,23 +37,28 @@ public class SpawnerOwnerListener implements Listener {
         ItemStack itemStack = item.getItemStack();
         NBTItem nbtItem = new NBTItem(itemStack);
 
+        Player p = event
+                .getPlayer();
         if (!nbtItem.hasTag("ms_owner")) {
+
             if (!nbtItem.hasTag("ms_mob")){
                 return;
             }
             int amt = itemStack.getAmount();
             boolean msMob = NewConfig.get().EXCLUDED.contains(nbtItem.getString("ms_mob"));
-            if (msMob)return;
-            ItemStack msMob1 = MineableSpawners.getApi().getSpawnerFromEntityType(EntityType.valueOf(nbtItem.getString("ms_mob")), event.getPlayer().getUniqueId());
+            if (msMob){
+                return;
+            }
+            ItemStack msMob1 = MineableSpawners.getApi().getSpawnerFromEntityType(EntityType.valueOf(nbtItem.getString("ms_mob")), p.getUniqueId());
 
             msMob1.setAmount(amt);
             event.getItem().setItemStack(msMob1);
             return;
         }
-        if (event.getPlayer().hasPermission("mineablespawners.bypass"))return;
+        if (p.hasPermission("mineablespawners.bypass"))return;
 
         UUID uuid = UUID.fromString(nbtItem.getString("ms_owner"));
-        if (event.getPlayer().getUniqueId().equals(uuid)){
+        if (p.getUniqueId().equals(uuid)){
 
             return;
         }

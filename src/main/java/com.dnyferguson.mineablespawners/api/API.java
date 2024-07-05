@@ -67,19 +67,7 @@ public class API {
         meta.addItemFlags(ItemFlag.values());
         String mobFormatted = Chat.uppercaseStartingLetters(entityType.name().toString());
         meta.setDisplayName(plugin.getConfigurationHandler().getMessage("global", "name").replace("%mob%", mobFormatted));
-        List<String> newLore = new ArrayList<>();
-        if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
-            for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
-                if (line.toLowerCase().contains("%owner%")){
-                    if (owner==null)continue;
-                    newLore.add(Chat.format(line).replace("%owner%",getUsername(owner)).replace("%mob%", mobFormatted));
-                } else {
 
-                    newLore.add(Chat.format(line).replace("%mob%", mobFormatted));
-                }
-            }
-            meta.setLore(newLore);
-        }
         item.setItemMeta(meta);
 
 
@@ -97,7 +85,26 @@ public class API {
             nbti.setString("ms_owner", owner.toString());
 
         }
-        return nbti.getItem();
+
+        item = nbti.getItem();
+        meta = item.getItemMeta();
+
+        List<String> newLore = new ArrayList<>();
+        if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
+            for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
+                if (line.toLowerCase().contains("%owner%")){
+                    if (owner==null)continue;
+                    newLore.add(Chat.format(line).replace("%owner%",getUsername(owner)).replace("%mob%", mobFormatted));
+                } else {
+
+                    newLore.add(Chat.format(line).replace("%mob%", mobFormatted));
+                }
+            }
+            meta.setLore(newLore);
+        }
+
+        item.setItemMeta(meta);
+        return item;
     }
 
     private String getUsername(UUID owner) {
