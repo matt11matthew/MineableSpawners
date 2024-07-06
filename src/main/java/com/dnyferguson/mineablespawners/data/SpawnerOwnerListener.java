@@ -3,6 +3,7 @@ package com.dnyferguson.mineablespawners.data;
 import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
 import com.dnyferguson.mineablespawners.api.API;
+import com.dnyferguson.mineablespawners.utils.SpawnerTypeUtil;
 import com.google.gson.JsonParseException;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
@@ -44,12 +45,14 @@ public class SpawnerOwnerListener implements Listener {
             if (!nbtItem.hasTag("ms_mob")){
                 return;
             }
+            String msMobType=nbtItem.getString("ms_mob");
             int amt = itemStack.getAmount();
-            boolean msMob = NewConfig.get().EXCLUDED.contains(nbtItem.getString("ms_mob"));
-            if (msMob){
+            boolean msMob = NewConfig.get().EXCLUDED.contains(msMobType);
+            if (msMob) {
                 return;
             }
-            ItemStack msMob1 = MineableSpawners.getApi().getSpawnerFromEntityType(EntityType.valueOf(nbtItem.getString("ms_mob")), p.getUniqueId());
+
+            ItemStack msMob1 = MineableSpawners.getApi().getSpawnerFromEntityType(EntityType.valueOf(msMobType), p.getUniqueId());
 
             msMob1.setAmount(amt);
             event.getItem().setItemStack(msMob1);
