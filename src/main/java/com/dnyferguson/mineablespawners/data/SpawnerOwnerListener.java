@@ -51,7 +51,21 @@ public class SpawnerOwnerListener implements Listener {
 
             NBTItem nbtItem =new NBTItem(stack);
             if (!nbtItem.hasTag("ms_mob")){
-                player.sendMessage(ChatColor.RED+"You have a broken spawners please message an admin and tell them to report this to ");
+                EntityType entityTypeFromItemStack = MineableSpawners.getApi().getEntityTypeFromItemStack(stack);
+                if (entityTypeFromItemStack==null){
+
+                    player.sendMessage(ChatColor.RED+"You have a broken spawners please message an admin and tell them to report this to ");
+
+                } else {
+                    if (player.isOp()) {
+                        player.sendMessage(ChatColor.GREEN +"(1) Fixed spawner " + i +" this message is only seen by OPs");
+                    }
+                    ItemStack itemStack = MineableSpawners.getApi()
+                            .getSpawnerFromEntityType(entityTypeFromItemStack, player.getUniqueId());
+                    itemStack.setAmount(stack.getAmount());
+                    fixedMap.put(i,
+                            itemStack);
+                }
 
             } else {
                 if (nbtItem.hasTag("ms_owner")){
@@ -61,11 +75,13 @@ public class SpawnerOwnerListener implements Listener {
                     }
                 }
                 if (player.isOp()) {
-                    player.sendMessage(ChatColor.GREEN +"Fixed spawner " + i +" this message is only seen by OPs");
+                    player.sendMessage(ChatColor.GREEN +"(2) Fixed spawner " + i +" this message is only seen by OPs");
                 }
+                ItemStack itemStack = MineableSpawners.getApi()
+                        .getSpawnerFromEntityType(EntityType.valueOf(nbtItem.getString("ms_mob")), player.getUniqueId());
+                itemStack.setAmount(stack.getAmount());
                 fixedMap.put(i,
-                        MineableSpawners.getApi()
-                                .getSpawnerFromEntityType(EntityType.valueOf(nbtItem.getString("ms_mob")), player.getUniqueId()));
+                        itemStack);
             }
         }
         fixedMap.forEach((integer, itemStack) -> player.getInventory().setItem(integer, itemStack));
