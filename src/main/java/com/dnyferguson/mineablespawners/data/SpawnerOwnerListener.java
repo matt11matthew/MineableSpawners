@@ -7,6 +7,7 @@ import com.dnyferguson.mineablespawners.utils.SpawnerTypeUtil;
 import com.google.gson.JsonParseException;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
@@ -14,9 +15,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 /**
@@ -30,6 +35,42 @@ public class SpawnerOwnerListener implements Listener {
         this.mineableSpawners = mineableSpawners;
     }
 
+
+    @EventHandler
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        fixSpawners(event.getPlayer());
+    }
+
+    private void fixSpawners(Player player) {
+
+        Map<Integer,ItemStack> fixedMap= new HashMap<>();
+        for (int i = 0; i < player.getInventory().getContents().length; i++) {
+            ItemStack stack =  player.getInventory().getContents()[i];
+            if (stack==null)continue;
+            if (stack.getType()!=XMaterial.SPAWNER.parseMaterial()) continue;
+
+            NBTItem nbtItem =new NBTItem(stack);
+            if (!nbtItem.hasTag("ms_mob")){
+                player.sendMessage(ChatColor.RED+"You have a broken spawners please message an admin and tell them to report this to ");
+
+            } else {
+                if (nbtItem.hasTag("ms_owner")){
+                    String msOwner = nbtItem.getString("ms_owner");
+                    if (!msOwner.equals(player.getUniqueId().toString())){
+                        continue;
+                    }
+                }
+                if (player.isOp()) {
+                    player.sendMessage(ChatColor.GREEN +"Fixed spawner " + i +" this message is only seen by OPs");
+                }
+                fixedMap.put(i,
+                        MineableSpawners.getApi()
+                                .getSpawnerFromEntityType(EntityType.valueOf(nbtItem.getString("ms_mob")), player.getUniqueId()));
+            }
+        }
+        fixedMap.forEach((integer, itemStack) -> player.getInventory().setItem(integer, itemStack));
+        player.updateInventory();
+    }
 
     @EventHandler
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
