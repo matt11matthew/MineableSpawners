@@ -82,15 +82,17 @@ public class SpawnerMineListener implements Listener {
         MSpawnerRegistry mSpawnerRegistry = MSpawnerRegistry.get();
 
         UUID owner = null;
-        if (mSpawnerRegistry.isSpawner(block.getLocation())){
-            MSpawner spawner1 = mSpawnerRegistry.getSpawner(loc);
-            if (spawner1==null){
-                e.setCancelled(true);
-                Bukkit.getServer().broadcastMessage(ChatColor.RED+"Major error with MineableSpawners please report ASAP!");
-                return;
-            }
+        MSpawner spawner1 = mSpawnerRegistry.getSpawner(loc);
+        if (spawner1!=null){
+//            Bukkit.getServer().broadcastMessage(ChatColor.RED+"FOUND SPAWNER");
+
             owner=spawner1.getOwner();
-            if (!spawner1.getOwner().equals(e.getPlayer().getUniqueId())){
+
+            boolean bypassing = e.getPlayer().getGameMode().equals(GameMode.CREATIVE)
+                    || e.getPlayer().hasPermission("mineablespawners.bypass");
+
+
+            if (!spawner1.getOwner().equals(e.getPlayer().getUniqueId()) && !bypassing){
                 NewConfig.get().NOT_OWNER_CANT_BREAK.send(e.getPlayer());
                 e.setCancelled(true);
 
@@ -108,11 +110,12 @@ public class SpawnerMineListener implements Listener {
         || player.hasPermission("mineablespawners.bypass");
 
         if (bypassing) {
-            onBreak(loc);
+            boolean b = onBreak(loc);
 
             player.sendMessage(colorize("&c&lBYPASSED"));
             giveSpawner(e, entityType, loc, player, block, 0, owner);
             return;
+
         }
 
         // check if blacklisted world
@@ -207,17 +210,17 @@ public class SpawnerMineListener implements Listener {
         giveSpawner(e, entityType, loc, player, block, cost, player.getUniqueId());
     }
 
-    private void onBreak(Location loc) {
+    private boolean onBreak(Location loc) {
         MSpawnerRegistry mSpawnerRegistry = MSpawnerRegistry.get();
         if (mSpawnerRegistry.isSpawner(loc)) {
             MSpawner spawner = mSpawnerRegistry.getSpawner(loc);
             boolean b = mSpawnerRegistry.deleteSpawner(loc);
             if (b) {
-                if (AtherialLibPlugin.getInstance().isDebug()){
-//                    Bukkit.getServer().broadcastMessage("BREAK " + spawner);
-                }
+                return true;
+
             }
         }
+        return false;
     }
 
     private void giveSpawner(BlockBreakEvent e, EntityType entityType, Location loc, Player player, Block block, double cost, UUID owner) {

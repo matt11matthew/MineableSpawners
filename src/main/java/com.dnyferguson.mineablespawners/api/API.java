@@ -71,17 +71,12 @@ public class API {
         item.setItemMeta(meta);
 
 
-        boolean excluded = false;
-        for (String s : MineableSpawners.getNewC().EXCLUDED) {
-            if (s.equalsIgnoreCase(entityType.toString())) {
-                excluded=true;
-                break;
-            }
-        }
+        boolean soundbound = MineableSpawners.getNewC().EXCLUDED.contains(entityType.name());
+//        Bukkit.getServer().broadcastMessage(soundbound+"");
 
         NBTItem nbti = new NBTItem(item);
         nbti.setString("ms_mob", entityType.name());
-        if (excluded && owner!=null) {
+        if (soundbound && owner!=null) {
             nbti.setString("ms_owner", owner.toString());
 
         }
@@ -94,10 +89,21 @@ public class API {
             for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
                 if (line.toLowerCase().contains("%owner%")){
 
-                    if (owner==null)continue;
-                    if (excluded)continue;
-                    newLore.add(Chat.format(line).replace("%owner%",getUsername(owner)).replace("%mob%", mobFormatted));
+                    if (owner==null) {
+//                        Bukkit.getServer().broadcastMessage("NULL OWNER");
+                    } else {
+//                        Bukkit.getServer().broadcastMessage("NOT NULL OWNER");
+                        if (soundbound) {
+//                            Bukkit.getServer().broadcastMessage(line);
+//                            Bukkit.getServer().broadcastMessage("-------------------");
+//                            Bukkit.getServer().broadcastMessage("SB");
+
+                            newLore.add(Chat.format(line).replace("%owner%",getUsername(owner)).replace("%mob%", mobFormatted));
+//                            Bukkit.getServer().broadcastMessage("-------------------");
+                        }
+                    }
                 } else {
+//                    Bukkit.getServer().broadcastMessage("OTHER LINE " + line);
 
                     newLore.add(Chat.format(line).replace("%mob%", mobFormatted));
                 }

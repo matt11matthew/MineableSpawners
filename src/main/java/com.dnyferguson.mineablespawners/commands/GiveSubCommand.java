@@ -45,38 +45,39 @@ public class GiveSubCommand {
             return;
         }
 
-        ItemStack item = new ItemStack(XMaterial.SPAWNER.parseMaterial());
-        ItemMeta meta = item.getItemMeta();
-        item.setAmount(amount);
 
         String mobFormatted = Chat.uppercaseStartingLetters(entityType.name());
-        boolean excluded = false;
-        for (String s : MineableSpawners.getNewC().EXCLUDED) {
-            if (s.equalsIgnoreCase(entityType.toString())) {
-                excluded=true;
-                break;
-            }
-        }
-        meta.setDisplayName(Chat.format(plugin.getConfigurationHandler().getMessage("global", "name").replace("%mob%", mobFormatted)));
-        List<String> newLore = new ArrayList<>();
-        if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
-            for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
-                if (line.toLowerCase().contains("%owner%") && !excluded)continue;
-                newLore.add(Chat.format(line.replace("%owner%", targetPlayer.getName())).replace("%mob%", mobFormatted));
-            }
-            meta.setLore(newLore);
-        }
-        meta.addItemFlags(ItemFlag.values());
-        item.setItemMeta(meta);
+        boolean  soulbound  =  MineableSpawners.getNewC().EXCLUDED.contains(entityType.name());
 
-        NBTItem nbti = new NBTItem(item);
-        nbti.setString("ms_mob", entityType.name());
-        if (!excluded) {
-            nbti.setString("ms_owner", targetPlayer.getUniqueId().toString());
+//
+        ItemStack item = null;
+        if (soulbound) {
+            item =          MineableSpawners.getApi().getSpawnerFromEntityType(entityType,targetPlayer.getUniqueId());
+        } else {
+            item =          MineableSpawners.getApi().getSpawnerFromEntityType(entityType,null);
 
         }
 
-        item = nbti.getItem();
+        item.setAmount(amount);
+//        meta.setDisplayName(Chat.format(plugin.getConfigurationHandler().getMessage("global", "name").replace("%mob%", mobFormatted)));
+//        List<String> newLore = new ArrayList<>();
+//        if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
+//            for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
+//                if (line.toLowerCase().contains("%owner%") && !excluded)continue;
+//                newLore.add(Chat.format(line.replace("%owner%", targetPlayer.getName())).replace("%mob%", mobFormatted));
+//            }
+//            meta.setLore(newLore);
+//        }
+//        meta.addItemFlags(ItemFlag.values());
+//        item.setItemMeta(meta);
+//
+//        NBTItem nbti = new NBTItem(item);
+//        nbti.setString("ms_mob", entityType.name());
+//        if (!excluded) {
+//            nbti.setString("ms_owner", targetPlayer.getUniqueId().toString());
+//
+//        }
+
         Utils.addItemToInventory(targetPlayer, item, mobFormatted);
 
         sender.sendMessage(plugin.getConfigurationHandler().getMessage("give", "success").replace("%mob%", mobFormatted).replace("%target%", targetPlayer.getName()).replace("%amount%", amount + ""));
