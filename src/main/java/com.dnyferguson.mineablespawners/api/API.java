@@ -93,7 +93,9 @@ public class API {
         if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
             for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
                 if (line.toLowerCase().contains("%owner%")){
+
                     if (owner==null)continue;
+                    if (excluded)continue;
                     newLore.add(Chat.format(line).replace("%owner%",getUsername(owner)).replace("%mob%", mobFormatted));
                 } else {
 
