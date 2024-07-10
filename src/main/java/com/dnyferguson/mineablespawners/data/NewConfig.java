@@ -16,7 +16,7 @@ public class NewConfig  extends YamlConfig<MineableSpawners> {
     @SerializedName("msg.NOT_OWNER_PLACE_ITEM")    public ChatMessage NOT_OWNER_PLACE_ITEM = new ChatMessage("&cYou cannot place another players spawners!");
    @SerializedName("spawnDistance") public Integer SPAWN_DISTANCE = 32;
     @SerializedName("msg.NOT_OWNER_CANT_BREAK") public ChatMessage NOT_OWNER_CANT_BREAK = new ChatMessage("&cYou cannot break another players spawner!");
-    @SerializedName("notSoulBound")
+    @SerializedName("soulbound")
     public  List<String> EXCLUDED = Arrays.asList("ZOMBIE");
     public NewConfig( MineableSpawners plugin) {
         super("newC.yml", plugin);

@@ -105,7 +105,7 @@ public class SpawnerOwnerListener implements Listener {
             String msMobType=nbtItem.getString("ms_mob");
             int amt = itemStack.getAmount();
             boolean msMob = NewConfig.get().EXCLUDED.contains(msMobType);
-            if (msMob) {
+            if (!msMob) {
                 return;
             }
 

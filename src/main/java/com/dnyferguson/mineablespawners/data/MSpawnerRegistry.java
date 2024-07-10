@@ -10,6 +10,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -52,6 +53,16 @@ public class MSpawnerRegistry  extends DataObjectRegistry<MSpawner> {
 
     public boolean isSpawner(Location location) {
         return spawnerLocationMap.containsKey(AtherialXYZLocation.fromLocation(location, true));
+    }
+
+    @Override
+    public void onLoadAll(List<MSpawner> list) {
+        super.onLoadAll(list);
+        for (MSpawner mSpawner : list) {
+            spawnerLocationMap.put(mSpawner.getLocation(), mSpawner.getUuid());
+        }
+
+
     }
 
     public static MSpawnerRegistry get() {

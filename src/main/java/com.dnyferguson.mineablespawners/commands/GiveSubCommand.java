@@ -61,7 +61,7 @@ public class GiveSubCommand {
         List<String> newLore = new ArrayList<>();
         if (plugin.getConfigurationHandler().getList("global", "lore") != null && plugin.getConfigurationHandler().getBoolean("global", "lore-enabled")) {
             for (String line : plugin.getConfigurationHandler().getList("global", "lore")) {
-                if (line.toLowerCase().contains("%owner%") && excluded)continue;
+                if (line.toLowerCase().contains("%owner%") && !excluded)continue;
                 newLore.add(Chat.format(line.replace("%owner%", targetPlayer.getName())).replace("%mob%", mobFormatted));
             }
             meta.setLore(newLore);

@@ -81,7 +81,7 @@ public class API {
 
         NBTItem nbti = new NBTItem(item);
         nbti.setString("ms_mob", entityType.name());
-        if (!excluded && owner!=null) {
+        if (excluded && owner!=null) {
             nbti.setString("ms_owner", owner.toString());
 
         }

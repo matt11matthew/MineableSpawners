@@ -29,6 +29,10 @@ public class MSpawner  extends DataObject<MSpawner> {
 
     }
 
+    public AtherialXYZLocation getLocation() {
+        return location;
+    }
+
     public UUID getOwner() {
         return owner;
     }
