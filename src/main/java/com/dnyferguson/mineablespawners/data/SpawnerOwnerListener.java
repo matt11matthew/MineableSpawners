@@ -88,7 +88,7 @@ public class SpawnerOwnerListener implements Listener {
         player.updateInventory();
     }
 
-    @EventHandler
+//    @EventHandler
     public void onPlayerPickupItem(PlayerPickupItemEvent event) {
         Item item = event.getItem();
         if (item.getItemStack().getType()!= XMaterial.SPAWNER.parseMaterial())return;
@@ -132,10 +132,21 @@ public class SpawnerOwnerListener implements Listener {
         Location location = event.getSpawner().getLocation();
 
         MSpawnerRegistry spawnerRegistry = MSpawnerRegistry.get();
+        if (event.getSpawner().getSpawnedEntity()!=null) {
+
+            boolean soulbound = NewConfig.get().EXCLUDED.contains(event.getSpawner().getSpawnedEntity().getEntityType().name());
+            if (soulbound) {
+                if (!spawnerRegistry.isSpawner(location)) {
+                    event.setCancelled(true);
+                    return;
+                }
+
+            }
+        }
+
         if (!spawnerRegistry.isSpawner(location))return;
-
-
         MSpawner spawner = spawnerRegistry.getSpawner(location);
+
 
         Player ownerPlayer = null;
         for (Player onlinePlayer : Bukkit.getServer().getOnlinePlayers()) {

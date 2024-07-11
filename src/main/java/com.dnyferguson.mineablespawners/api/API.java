@@ -56,7 +56,7 @@ public class API {
         return entityType;
     }
 
-//    public ItemStack getSpawnerFromEntityName(String entityName) {
+//    public ItemStack getSpawnerFromEntityName(String entityName) {[
 //        EntityType entityType = EntityType.valueOf(entityName.toUpperCase().replace(" ","_"));
 //        return getSpawnerFromEntityType(entityType);
 //    }
