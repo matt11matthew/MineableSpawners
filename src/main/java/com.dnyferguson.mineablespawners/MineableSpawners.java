@@ -64,7 +64,7 @@ public final class MineableSpawners extends AtherialAddon {
 
     @Override
     public void onStop() {
-
+        spawnerRegistry.saveAll();
     }
 
     @Override
