@@ -108,6 +108,9 @@ public class SpawnerMineListener implements Listener {
         Player player = e.getPlayer();
         boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE)
         || player.hasPermission("mineablespawners.bypass");
+        if (!player.isSneaking()){
+            bypassing = false;
+        }
 
         if (bypassing) {
             boolean b = onBreak(loc);
