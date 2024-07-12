@@ -113,10 +113,15 @@ public class SpawnerMineListener implements Listener {
         }
 
         if (bypassing) {
-            boolean b = onBreak(loc);
+            MSpawner b = onBreak(loc);
 
+            if (b==null){
+                e.setCancelled(true);
+                player.sendMessage(ChatColor.RED+"Major error has occurred not properly detecting spawner?");
+                return;
+            }
             player.sendMessage(colorize("&c&lBYPASSED"));
-            giveSpawner(e, entityType, loc, player, block, 0, owner);
+            giveSpawner(e, entityType, loc, player, block, 0, b.getOwner());
             return;
 
         }
@@ -213,17 +218,17 @@ public class SpawnerMineListener implements Listener {
         giveSpawner(e, entityType, loc, player, block, cost, player.getUniqueId());
     }
 
-    private boolean onBreak(Location loc) {
+    private MSpawner onBreak(Location loc) {
         MSpawnerRegistry mSpawnerRegistry = MSpawnerRegistry.get();
         if (mSpawnerRegistry.isSpawner(loc)) {
             MSpawner spawner = mSpawnerRegistry.getSpawner(loc);
             boolean b = mSpawnerRegistry.deleteSpawner(loc);
             if (b) {
-                return true;
+                return spawner;
 
             }
         }
-        return false;
+        return null;
     }
 
     private void giveSpawner(BlockBreakEvent e, EntityType entityType, Location loc, Player player, Block block, double cost, UUID owner) {
