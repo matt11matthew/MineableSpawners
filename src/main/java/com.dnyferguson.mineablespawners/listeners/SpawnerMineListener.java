@@ -108,8 +108,11 @@ public class SpawnerMineListener implements Listener {
         Player player = e.getPlayer();
         boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE)
         || player.hasPermission("mineablespawners.bypass");
-        if (!player.isSneaking()){
-            bypassing = false;
+        if (bypassing&&!player.isSneaking()){
+            e.setCancelled(true);
+            player.sendMessage(ChatColor.RED+"You must be sneaking to mine this as an admin..");
+            return;
+
         }
 
         if (bypassing) {
@@ -117,7 +120,6 @@ public class SpawnerMineListener implements Listener {
 
             if (b==null){
                 e.setCancelled(true);
-                player.sendMessage(ChatColor.RED+"Major error has occurred not properly detecting spawner?");
                 return;
             }
             player.sendMessage(colorize("&c&lBYPASSED"));
