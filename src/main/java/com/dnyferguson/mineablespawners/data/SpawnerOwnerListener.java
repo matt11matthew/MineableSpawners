@@ -6,6 +6,8 @@ import com.dnyferguson.mineablespawners.api.API;
 import com.dnyferguson.mineablespawners.utils.SpawnerTypeUtil;
 import com.google.gson.JsonParseException;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import fr.maxlego08.zauctionhouse.api.event.events.AuctionOpenEvent;
+import fr.maxlego08.zauctionhouse.api.event.events.AuctionPreSellEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -166,5 +168,17 @@ public class SpawnerOwnerListener implements Listener {
 //            Bukkit.getServer(). broadcastMessage("CANCEL");
         }
 //        Bukkit.getServer().broadcastMessage("ALLOW SPAWN");
+    }
+
+    @EventHandler
+    public void onAuctionPreSell(AuctionPreSellEvent event) {
+        ItemStack itemStack = event.getItemStack();
+
+        NBTItem nbtItem = new NBTItem(itemStack);
+        if (nbtItem.hasTag("ms_owner")){
+            event.setCancelled(true);
+            NewConfig.get().CANT_LIST_SOUL_BOUND.send(event.getPlayer());
+
+        }
     }
 }

@@ -98,6 +98,13 @@
             <systemPath>${basedir}/lib/shopgui-api-3.0.0.jar</systemPath>
         </dependency>
         <dependency>
+            <groupId>zAuctionHouse</groupId>
+            <artifactId>zAuctionHouse</artifactId>
+            <version>3.2.2.0</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/zAuctionHouse-3.2.2.0.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.20.6-R0.1-SNAPSHOT</version>

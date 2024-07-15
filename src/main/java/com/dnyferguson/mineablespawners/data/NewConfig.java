@@ -18,6 +18,9 @@ public class NewConfig  extends YamlConfig<MineableSpawners> {
     @SerializedName("msg.NOT_OWNER_CANT_BREAK") public ChatMessage NOT_OWNER_CANT_BREAK = new ChatMessage("&cYou cannot break another players spawner!");
     @SerializedName("soulbound")
     public  List<String> EXCLUDED = Arrays.asList("ZOMBIE");
+
+    @SerializedName("msg.CANT_LIST_SOUL_BOUND")
+    public ChatMessage CANT_LIST_SOUL_BOUND = new ChatMessage("&cYou cannot sell soulbound items.");
     public NewConfig( MineableSpawners plugin) {
         super("newC.yml", plugin);
     }
