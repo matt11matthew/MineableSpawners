@@ -119,7 +119,8 @@ public class SpawnerMineListener implements Listener {
             MSpawner b = onBreak(loc);
 
             if (b==null){
-                e.setCancelled(true);
+                player.sendMessage(colorize("&c&lBYPASSED UNBOUNDED SPAWNER"));
+                giveSpawner(e, entityType, loc, player, block, 0, null);
                 return;
             }
             player.sendMessage(colorize("&c&lBYPASSED"));
