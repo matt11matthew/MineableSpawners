@@ -163,6 +163,10 @@ public class SpawnerOwnerListener implements Listener {
             return;
         }
 
+        if (!ownerPlayer.getWorld().getName().equals(location.getWorld().getName())){
+
+            return;
+        }
         if (ownerPlayer.getLocation().distance(location) > NewConfig.get().SPAWN_DISTANCE) {
             event.setCancelled(true);
 //            Bukkit.getServer(). broadcastMessage("CANCEL");
