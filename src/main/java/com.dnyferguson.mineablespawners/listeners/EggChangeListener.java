@@ -34,7 +34,7 @@ public class EggChangeListener implements Listener {
         String itemName = itemInHand.getType().name();
         Material targetBlock = e.getClickedBlock().getType();
 
-        if (targetBlock != XMaterial.SPAWNER.parseMaterial() || !itemName.contains("SPAWN_EGG")) {
+        if (!isSpawner(targetBlock)|| !itemName.contains("SPAWN_EGG")) {
             return;
         }
 
@@ -77,5 +77,8 @@ public class EggChangeListener implements Listener {
         }
 
         player.sendMessage(plugin.getConfigurationHandler().getMessage("eggs", "success").replace("%from%", from).replace("%to%", to));
+    }
+
+    public static boolean isSpawner(Material targetBlock) {
     }
 }
