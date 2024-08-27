@@ -11,6 +11,8 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.annotation.Target;
+
 public class EggChangeListener implements Listener {
     private final MineableSpawners plugin;
 
@@ -80,5 +82,9 @@ public class EggChangeListener implements Listener {
     }
 
     public static boolean isSpawner(Material targetBlock) {
+        if (targetBlock==XMaterial.SPAWNER.parseMaterial()) return true;
+        if (targetBlock==Material.SPAWNER)return true;
+        return targetBlock==Material.TRIAL_SPAWNER;
+
     }
 }

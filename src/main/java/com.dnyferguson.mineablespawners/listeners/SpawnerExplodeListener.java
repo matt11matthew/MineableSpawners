@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.dnyferguson.mineablespawners.MineableSpawners;
 import com.dnyferguson.mineablespawners.utils.Chat;
 import de.tr7zw.changeme.nbtapi.NBTItem;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;
 import org.bukkit.event.EventHandler;
@@ -37,9 +38,9 @@ public class SpawnerExplodeListener implements Listener {
 
         boolean disabled =true;
         for (Block block : e.blockList()) {
-            if (!block.getType().equals(XMaterial.SPAWNER.parseMaterial())) {
-                continue;
-            }
+            if (!EggChangeListener.isSpawner(block.getType()))continue;
+
+
             if (disabled) {
                 removeList.add(block);
 
@@ -57,7 +58,7 @@ public class SpawnerExplodeListener implements Listener {
 
             CreatureSpawner spawner = (CreatureSpawner) block.getState();
 
-            ItemStack item = new ItemStack(XMaterial.SPAWNER.parseMaterial());
+            ItemStack item = new ItemStack(block.getType()== Material.TRIAL_SPAWNER?Material.TRIAL_SPAWNER:XMaterial.SPAWNER.parseMaterial());
             ItemMeta meta = item.getItemMeta();
             String mobFormatted = Chat.uppercaseStartingLetters(spawner.getSpawnedType().toString());
 
