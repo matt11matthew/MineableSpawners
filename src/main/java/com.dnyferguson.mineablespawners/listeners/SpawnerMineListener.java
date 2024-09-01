@@ -70,8 +70,7 @@ public class SpawnerMineListener implements Listener {
         // check if block is spawner
         Block block = e.getBlock();
         Material material = block.getType();
-        if (!EggChangeListener.isSpawner(material))return;
-
+        if (block.getType()!=XMaterial.SPAWNER.parseMaterial()) return;
 
 
         // get spawner location & type

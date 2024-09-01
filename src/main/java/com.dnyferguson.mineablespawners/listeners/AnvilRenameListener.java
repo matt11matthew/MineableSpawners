@@ -28,7 +28,9 @@ public class AnvilRenameListener implements Listener {
     if (e.getInventory().getType() != InventoryType.ANVIL ) {
       return;
     }
-    if (!EggChangeListener.isSpawner(e.getCurrentItem().getType()))return;
+
+    if (e.getCurrentItem().getType()!=XMaterial.SPAWNER.parseMaterial()) return;
+
 
     if (!plugin.getConfigurationHandler().getBoolean("anvil", "prevent-anvil")) {
       return;

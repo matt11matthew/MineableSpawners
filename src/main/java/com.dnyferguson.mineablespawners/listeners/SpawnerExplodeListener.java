@@ -38,8 +38,7 @@ public class SpawnerExplodeListener implements Listener {
 
         boolean disabled =true;
         for (Block block : e.blockList()) {
-            if (!EggChangeListener.isSpawner(block.getType()))continue;
-
+            if (block.getType()!=XMaterial.SPAWNER.parseMaterial()) continue;
 
             if (disabled) {
                 removeList.add(block);
