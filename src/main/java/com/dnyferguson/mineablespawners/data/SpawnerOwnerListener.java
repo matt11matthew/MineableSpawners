@@ -1,6 +1,7 @@
 package com.dnyferguson.mineablespawners.data;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.destroystokyo.paper.event.entity.PreSpawnerSpawnEvent;
 import com.dnyferguson.mineablespawners.MineableSpawners;
 import com.dnyferguson.mineablespawners.api.API;
 import com.dnyferguson.mineablespawners.utils.SpawnerTypeUtil;
@@ -8,6 +9,8 @@ import com.google.gson.JsonParseException;
 import de.tr7zw.changeme.nbtapi.NBTItem;
 import fr.maxlego08.zauctionhouse.api.event.events.AuctionOpenEvent;
 import fr.maxlego08.zauctionhouse.api.event.events.AuctionPreSellEvent;
+import me.matthewedevelopment.atheriallib.utilities.AtherialTasks;
+import me.matthewedevelopment.atheriallib.utilities.number.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -15,13 +18,16 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.spawner.Spawner;
 
+import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -129,14 +135,59 @@ public class SpawnerOwnerListener implements Listener {
 
     }
 
+
     @EventHandler
+    public void onPreSpawnerSpawn(PreSpawnerSpawnEvent event) {
+        Spawner  spawner = (Spawner) event.getSpawnerLocation().getBlock().getState();
+        Bukkit.getServer().broadcastMessage(ChatColor.RED+""+spawner.getDelay());
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    public void onPostSpawn(SpawnerSpawnEvent event) {
+        NewConfig c = NewConfig.get();
+        if (event.getSpawner() == null) return;
+
+        event.getSpawner().resetTimer(); // Reset the timer after the spawn event
+        AtherialTasks.runIn(() -> {
+
+            if (Bukkit.getServer().getOnlinePlayers().size() < c.onlineAmt) {
+                return;
+            }
+
+            int delay = event.getSpawner().getDelay();
+            if (delay == 0) {
+
+                return;
+            }
+
+
+            // Get the percentage from config
+            double number = NumberUtils.getNumber(new String(c.reduceRate).replace("%", "").trim());
+
+            // Correct the multiplier to increase the delay
+            double multi = 1 + (number / 100.0D); // Increase delay by the percentage
+
+
+            // Apply the new delay by increasing the current delay
+            double increasedDelay = (double) delay * multi;
+
+
+            // Set the new delay (casting back to int if needed)
+            event.getSpawner().setDelay((int) increasedDelay);
+
+        }, 2L);
+    }
+
+
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onSpawnerSpawn(SpawnerSpawnEvent event) {
         Location location = event.getSpawner().getLocation();
 
+        NewConfig c = NewConfig.get();
         MSpawnerRegistry spawnerRegistry = MSpawnerRegistry.get();
         if (event.getSpawner().getSpawnedEntity()!=null) {
 
-            boolean soulbound = NewConfig.get().EXCLUDED.contains(event.getSpawner().getSpawnedEntity().getEntityType().name());
+            boolean soulbound = c.EXCLUDED.contains(event.getSpawner().getSpawnedEntity().getEntityType().name());
             if (soulbound) {
                 if (!spawnerRegistry.isSpawner(location)) {
                     event.setCancelled(true);
@@ -167,11 +218,11 @@ public class SpawnerOwnerListener implements Listener {
 
             return;
         }
-        if (ownerPlayer.getLocation().distance(location) > NewConfig.get().SPAWN_DISTANCE) {
+        if (ownerPlayer.getLocation().distance(location) > c.SPAWN_DISTANCE) {
             event.setCancelled(true);
-//            Bukkit.getServer(). broadcastMessage("CANCEL");
+            return;
         }
-//        Bukkit.getServer().broadcastMessage("ALLOW SPAWN");
+
     }
 
     @EventHandler

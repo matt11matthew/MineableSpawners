@@ -19,6 +19,12 @@ public class NewConfig  extends YamlConfig<MineableSpawners> {
     @SerializedName("soulbound")
     public  List<String> EXCLUDED = Arrays.asList("ZOMBIE");
 
+    @SerializedName("performance.onlineAmt")
+    public Integer onlineAmt = 50;
+    @SerializedName("performance.reduceRate")
+    public String reduceRate = "25.0%";
+
+
     @SerializedName("msg.CANT_LIST_SOUL_BOUND")
     public ChatMessage CANT_LIST_SOUL_BOUND = new ChatMessage("&cYou cannot sell soulbound items.");
     public NewConfig( MineableSpawners plugin) {
