@@ -136,11 +136,11 @@ public class SpawnerOwnerListener implements Listener {
     }
 
 
-    @EventHandler
-    public void onPreSpawnerSpawn(PreSpawnerSpawnEvent event) {
-        Spawner  spawner = (Spawner) event.getSpawnerLocation().getBlock().getState();
-        Bukkit.getServer().broadcastMessage(ChatColor.RED+""+spawner.getDelay());
-    }
+//    @EventHandler
+//    public void onPreSpawnerSpawn(PreSpawnerSpawnEvent event) {
+//        Spawner  spawner = (Spawner) event.getSpawnerLocation().getBlock().getState();
+//        Bukkit.getServer().broadcastMessage(ChatColor.RED+""+spawner.getDelay());
+//    }
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPostSpawn(SpawnerSpawnEvent event) {
