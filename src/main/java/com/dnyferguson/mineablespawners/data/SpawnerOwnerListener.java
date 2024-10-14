@@ -144,38 +144,48 @@ public class SpawnerOwnerListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     public void onPostSpawn(SpawnerSpawnEvent event) {
+        if (event.isCancelled())return;
         NewConfig c = NewConfig.get();
         if (event.getSpawner() == null) return;
 
-        event.getSpawner().resetTimer(); // Reset the timer after the spawn event
-        AtherialTasks.runIn(() -> {
-
-            if (Bukkit.getServer().getOnlinePlayers().size() < c.onlineAmt) {
-                return;
-            }
-
-            int delay = event.getSpawner().getDelay();
-            if (delay == 0) {
-
-                return;
-            }
+        if (Bukkit.getServer().getOnlinePlayers().size() < c.onlineAmt) {
+            return;
+        }
+        double reduceSpawnRateByPercent = NumberUtils.getNumber(new String(c.reduceRate).replace("%", "").trim());
+        if (Math.random() * 100 < reduceSpawnRateByPercent) {
+            event.setCancelled(true); // Cancel the event based on the reduction percentage
+        }
 
 
-            // Get the percentage from config
-            double number = NumberUtils.getNumber(new String(c.reduceRate).replace("%", "").trim());
-
-            // Correct the multiplier to increase the delay
-            double multi = 1 + (number / 100.0D); // Increase delay by the percentage
-
-
-            // Apply the new delay by increasing the current delay
-            double increasedDelay = (double) delay * multi;
-
-
-            // Set the new delay (casting back to int if needed)
-            event.getSpawner().setDelay((int) increasedDelay);
-
-        }, 2L);
+//        event.getSpawner().resetTimer(); // Reset the timer after the spawn event
+//        AtherialTasks.runIn(() -> {
+//
+//            if (Bukkit.getServer().getOnlinePlayers().size() < c.onlineAmt) {
+//                return;
+//            }
+//
+//            int delay = event.getSpawner().getDelay();
+//            if (delay == 0) {
+//
+//                return;
+//            }
+//
+//
+//            // Get the percentage from config
+//            double number = NumberUtils.getNumber(new String(c.reduceRate).replace("%", "").trim());
+//
+//            // Correct the multiplier to increase the delay
+//            double multi = 1 + (number / 100.0D); // Increase delay by the percentage
+//
+//
+//            // Apply the new delay by increasing the current delay
+//            double increasedDelay = (double) delay * multi;
+//
+//
+//            // Set the new delay (casting back to int if needed)
+//            event.getSpawner().setDelay((int) increasedDelay);
+//
+//        }, 2L);
     }
 
 
