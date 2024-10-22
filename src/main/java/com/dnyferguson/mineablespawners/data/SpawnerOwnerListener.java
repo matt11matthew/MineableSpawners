@@ -228,10 +228,11 @@ public class SpawnerOwnerListener implements Listener {
 
             return;
         }
-        if (ownerPlayer.getLocation().distanceSquared(location) > Math.pow(c.SPAWN_DISTANCE,2)) {
+        if (ownerPlayer.getLocation().distanceSquared(location) > c.SPAWN_DISTANCE * c.SPAWN_DISTANCE) {
             event.setCancelled(true);
             return;
         }
+
 
     }
 
