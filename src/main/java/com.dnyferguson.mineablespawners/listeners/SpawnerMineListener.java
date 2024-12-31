@@ -6,8 +6,6 @@ import com.dnyferguson.mineablespawners.data.MSpawner;
 import com.dnyferguson.mineablespawners.data.MSpawnerRegistry;
 import com.dnyferguson.mineablespawners.data.NewConfig;
 import com.dnyferguson.mineablespawners.utils.Chat;
-import me.matthewe.atheriallibplugin.AtherialLibPlugin;
-import me.matthewedevelopment.atheriallib.AtherialLib;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.CreatureSpawner;

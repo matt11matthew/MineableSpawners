@@ -1,16 +1,9 @@
 package com.dnyferguson.mineablespawners.data;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.destroystokyo.paper.event.entity.PreSpawnerSpawnEvent;
 import com.dnyferguson.mineablespawners.MineableSpawners;
-import com.dnyferguson.mineablespawners.api.API;
-import com.dnyferguson.mineablespawners.utils.SpawnerTypeUtil;
-import com.google.gson.JsonParseException;
-import de.tr7zw.changeme.nbtapi.NBTItem;
-import fr.maxlego08.zauctionhouse.api.event.events.AuctionOpenEvent;
+import de.tr7zw.nbtapi.NBTItem;
 import fr.maxlego08.zauctionhouse.api.event.events.AuctionPreSellEvent;
-import me.matthewedevelopment.atheriallib.utilities.AtherialTasks;
-import me.matthewedevelopment.atheriallib.utilities.number.NumberUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -24,10 +17,7 @@ import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.spawner.Spawner;
 
-import java.text.DecimalFormat;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;

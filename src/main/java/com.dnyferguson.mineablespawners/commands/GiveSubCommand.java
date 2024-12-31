@@ -5,7 +5,6 @@ import com.dnyferguson.mineablespawners.MineableSpawners;
 import com.dnyferguson.mineablespawners.data.NewConfig;
 import com.dnyferguson.mineablespawners.utils.Chat;
 import com.dnyferguson.mineablespawners.utils.Utils;
-import de.tr7zw.changeme.nbtapi.NBTItem;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.EntityType;

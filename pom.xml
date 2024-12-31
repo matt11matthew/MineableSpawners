@@ -53,10 +53,10 @@
                 </executions>
                 <configuration>
                     <relocations>
-                        <relocation>
-                            <pattern>de.tr7zw.changeme.nbtapi</pattern>
-                            <shadedPattern>com.dnyferguson.mineablespawners.nbtapi</shadedPattern>
-                        </relocation>
+<!--                        <relocation>-->
+<!--                            <pattern>de.tr7zw.changeme.nbtapi</pattern>-->
+<!--                            <shadedPattern>com.dnyferguson.mineablespawners.nbtapi</shadedPattern>-->
+<!--                        </relocation>-->
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
                             <shadedPattern>com.dnyferguson.mineablespawners.xseries</shadedPattern>
@@ -117,6 +117,14 @@
             <version>1.21-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <dependency>
+            <systemPath>${basedir}/lib/item-nbt-api-plugin-2.14.1.jar
+            </systemPath>
+            <version>1</version>
+            <scope>system</scope>
+            <groupId>nbt</groupId>
+            <artifactId>nbt</artifactId>
+        </dependency>
 
 
         <dependency>
@@ -135,17 +143,17 @@
             <scope>provided</scope>
             <groupId>me.matthewedevelopment</groupId>
             <artifactId>atheriallib</artifactId>
-            <version>1.0.3</version>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
             <version>8.7.1</version>
         </dependency>
-        <dependency>
-            <groupId>de.tr7zw</groupId>
-            <artifactId>item-nbt-api</artifactId>
-            <version>2.13.2</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>de.tr7zw</groupId>-->
+<!--            <artifactId>item-nbt-api</artifactId>-->
+<!--            <version>2.13.2</version>-->
+<!--        </dependency>-->
     </dependencies>
 </project>

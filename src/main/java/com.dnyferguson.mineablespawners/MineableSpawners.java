@@ -45,7 +45,7 @@ public final class MineableSpawners extends AtherialAddon {
     private void hookIntoShopGui() {
         try {
             ShopGuiPlusApi.registerSpawnerProvider(this.spawnerProvider);
-        } catch (ExternalSpawnerProviderNameConflictException e) {
+        } catch (Exception e) {
             getLogger().warning("Failed to hook into ShopGUI+: " + e.getMessage());
         }
     }

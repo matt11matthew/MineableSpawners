@@ -6,7 +6,7 @@ description: A simplistic silk spawner plugin
 website: https://dnyferguson.com
 softdepend: [Vault]
 depend: [AtherialLibPlugin, ShopGUIPlus, zAuctionHouseV3]
-api-version: 1.13
+api-version: 1.21
 commands:
   mineablespawners:
     aliases: [ms, mineablespawner]
