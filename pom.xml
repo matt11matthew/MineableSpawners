@@ -90,12 +90,19 @@
     </repositories>
 
     <dependencies>
+<!--        <dependency>-->
+<!--            <groupId>com.github.brcdev-minecraft</groupId>-->
+<!--            <artifactId>shopgui-api</artifactId>-->
+<!--            <version>3.0.0</version>-->
+<!--            <scope>system</scope>-->
+<!--            <systemPath>${basedir}/lib/shopgui-api-3.0.0.jar</systemPath>-->
+<!--        </dependency>-->
         <dependency>
             <groupId>com.github.brcdev-minecraft</groupId>
-            <artifactId>shopgui-api</artifactId>
-            <version>3.0.0</version>
+            <artifactId>shopgui</artifactId>
+            <version>1</version>
             <scope>system</scope>
-            <systemPath>${basedir}/lib/shopgui-api-3.0.0.jar</systemPath>
+            <systemPath>${basedir}/lib/ShopGUIPlus-1.102.0.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>zAuctionHouse</groupId>
