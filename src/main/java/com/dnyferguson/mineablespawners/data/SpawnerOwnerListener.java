@@ -7,12 +7,15 @@ import fr.maxlego08.zauctionhouse.api.event.events.AuctionPreSellEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.SpawnerSpawnEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
@@ -174,7 +177,17 @@ public class SpawnerOwnerListener implements Listener {
 
 
     }
+    @EventHandler
+    public void onBlockPlace(BlockPlaceEvent event) {
+        Block placedBlock = event.getBlockPlaced();
+        Block blockBelow = placedBlock.getLocation().add(0, -1, 0).getBlock();
 
+        // Check if the placed block is a spawner and the block below is a note block
+        if (placedBlock.getType() == Material.SPAWNER && blockBelow.getType() == Material.NOTE_BLOCK) {
+            event.setCancelled(true);
+            event.getPlayer().sendMessage(ChatColor.RED + "You cannot place a spawner on top of a note block!");
+        }
+    }
     @EventHandler
     public void onAuctionPreSell(AuctionPreSellEvent event) {
         ItemStack itemStack = event.getItemStack();
