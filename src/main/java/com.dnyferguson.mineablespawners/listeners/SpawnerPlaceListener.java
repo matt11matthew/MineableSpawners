@@ -76,7 +76,7 @@ public class SpawnerPlaceListener implements Listener {
         }
         boolean bypassing = player.getGameMode().equals(GameMode.CREATIVE) || player.hasPermission("mineablespawners.bypass");
         if (bypassing) {
-            handlePlacement(player, block, entityType, 0, owner);
+            handlePlacement(player, block, entityType, 0, owner, true);
             return;
         }
 
@@ -105,17 +105,25 @@ public class SpawnerPlaceListener implements Listener {
         }
 
         // place
-        handlePlacement(player, block, entityType, cost, owner);
+        handlePlacement(player, block, entityType, cost, owner, false);
     }
 
-    private void handlePlacement(Player player, Block block, EntityType type, double cost, UUID owner) {
+    private void handlePlacement(Player player, Block block, EntityType type, double cost, UUID owner, boolean bypass) {
 
         CreatureSpawner spawner = (CreatureSpawner) block.getState();
         spawner.setSpawnedType(type);
         spawner.update();
 
-        if (owner!=null){
+        if (owner==null) {
+            if (bypass){
 
+                boolean soulbound = NewConfig.get().EXCLUDED.contains(type.name());
+                if (soulbound) {
+                    MSpawnerRegistry spawnerRegistry = MineableSpawners.getPlugin().getSpawnerRegistry();
+                    spawnerRegistry.insertNewSpawner(block.getLocation(),player, type);
+                }
+            }
+        } else {
             MSpawnerRegistry spawnerRegistry = MineableSpawners.getPlugin().getSpawnerRegistry();
             spawnerRegistry.insertNewSpawner(block.getLocation(),player, type);
         }
